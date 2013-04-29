@@ -1,0 +1,271 @@
+1-1. Comment one the choice of names and values
+in the following code:
+
+    >#define TRUE 0
+    >#define FALSE 1
+    >
+    >if ((ch = getchar()) == EOF)
+    >    not_eof = FALSE;
+
+    The values of "TRUE" and "FALSE" are the
+    "inverse" of their usual values, so that
+    they will confuse.
+
+    For example, the code:
+
+        printf("1 == 1 is '%d'\n", 1 == 1);
+
+    prints:
+
+        1 == 1 is '1'
+
+    Since 1 == 1 is "true", and "1", defining
+    TRUE to be zero "0" leads to confusion.
+
+    Consider:
+
+        if (TRUE) {
+            printf("Hello, world!\n");
+        }
+
+    and:
+
+        if (FALSE) {
+            printf("Goodbye, cruel world!\n");
+        }
+
+    By inspecting the code, you would expect
+    that "Hello World!" would always appear
+    when run, and that "Goodbye, cruel world!"
+    never would. This code defies that
+    expectation, and is therefore bad.
+
+    The name "not_eof" carries on this kind of
+    confusion, since it is assigned "FALSE" in
+    the fragment, making this a double-negation
+    of a weird and wrongly-defined value.
+
+1-2. Improve this function:
+
+    >int smaller(char *s, char *t) {
+    >   if (strcmp(s, t) < 1)
+    >       return 1;
+    >   else
+    >       return 0;
+    >}
+
+    The value "1" in the comparison is incorrect.
+    It should read "0", since my version of
+    strcmp "returns an integer less than 0".
+    Using a value of 1 would allow for strings
+    that are equal to be returned as "smaller".
+
+    I would define the function as:
+
+        int smaller(char *s, char*) {
+            return (strcmp(s, t) < 0)
+        }
+
+    since the values returned are equal to the
+    value returned by the expression, and there
+    is therefore no need for the if-statement.
+
+1-3. Read this code aloud:
+
+    if ((falloc(SMRHSHSCRTCH, S_IFEXT|0644,
+        MAXRODDHSH) < 0)
+
+    This code has names that are impossible to
+    pronounce, and difficult to spell and
+    remember.
+
+1-4. Improve each of these fragments:
+
+    >if ( !(c == 'y' || c == 'Y') )
+    >   return;
+
+    >length = (length < BUFSIZE) ? length : BUFSIZE;
+
+    >flag = flag ? 0 : 1;
+
+    >quote = (*line == '"') ? 1 : 0;
+
+    >if (val & 1)
+    >   bit = 1;
+    >else
+    >   bit = 0;
+
+    I would write the first as:
+
+        if (c != 'Y' && c != 'y') {
+            return;
+        }
+
+    I would write the second as:
+
+    if (length > BUFSIZE) {
+        length = BUFSIZE;
+    }
+
+    I have seen the third one in production
+    code, so I know what it does. I prefer
+    the construction:
+
+        flag = !flag;
+
+    as I think this makes it more clear that
+    you are "switching" a flag.
+
+    I would write the fourth as:
+
+        quote = (*line == '"');
+
+    Finally, I would write the fifth to be:
+
+        bit = (val & 1);
+
+    In my last two constructions I have parens
+    that are superfluous, but I think they're
+    okay because I hate thinking about operator
+    precedence and I'm never confident of the
+    precedence of pointer and bitwise.
+
+1-5. What is wrong with this excerpt?
+
+    >int read(int *ip) {
+    >   scan("%d", ip);
+    >   return *ip;
+    >}
+    >   ...
+    >insert(&graph[vert], read(&val), read(&ch));
+
+    The order of operations of evaluating the
+    operations is important here, but evaluation
+    of arguments to a function happen in
+    undefined order. So, confusion could be
+    caused if they don't evaluate in the
+    "expected" order.
+
+    Also, I would rather return the result of
+    scan, rather than the value read. This is
+    because it is then possible to check for
+    an error, and the value is still available.
+
+    My rewrite would be as follows:
+
+        int read(int *ip) {
+            return scan("%d", ip);
+        }
+            ...
+        check(read(&val));
+        check(read(&ch));
+        insert(&graph[vert], val, ch);
+
+    where "check" is a function that makes sure
+    that the return value of the function is
+    okay.
+
+1-6. List all the different outputs this could
+produce with various orders of evaluation:
+
+    >n = 1;
+    >printf("%d %d\n", n++, n++);
+
+    Try it on as many compilers as you can, to
+    see what happens in practice.
+
+    I could see the following outputs being
+    possibilities, since execution of "++", and
+    arguments are both in undefined order:
+
+        1 1
+        1 2
+        1 3
+        2 1
+        2 2
+        2 3
+        3 1
+        3 2
+        3 3
+
+    The "extremes" would be evaluated as:
+
+        printf("%d %d\n", n + 2, n + 2);
+
+    and:
+
+        printf("%d %d\n", n, n);
+
+    and the other values are possible using the
+    same idea, varying the parameters from the
+    initial value "n", "n + 1", and the
+    final value "n + 2".
+
+        printf("%d %d\n", n + 1, n);
+
+    Using my compiler[1], I get:
+
+        2 1
+
+    [1]: cc (Ubuntu/Linaro 4.7.2-2ubuntu1) 4.7.2
+
+1-7. Rewrite these C/C++ excerpts more clearly:
+
+    >if (istty(stdin)) ;
+    >else if (istty(stdout)) ;
+    >   else if (istty(stderr)) ;
+    >       else return(0);
+
+    >if (retval != SUCCESS)
+    >   return (retval);
+    >}
+    >/* All went well! */
+    >return SUCCESS;
+
+    >for (k = 0; k== < 5; x += dx)
+    >   scanf("%lf", %dx);
+
+    For the first, I would rewrite:
+
+        if !(istty(stdin) || istty(stoud) ||
+                             istty(stderr)) {
+            return 0;
+        }
+
+    For the second:
+
+        return retval;
+
+    For the third:
+
+        for (kk = 0; kk < 5; kk++) {
+            x += dx;
+            scanf(%lf", &dx);
+        }
+
+        My formulation of this seems odd to me,
+        since the last value of "dx" is never
+        used. I would prefer to rewrite so that
+        the "accumulation" of x comes *after*
+        the scan.
+
+1-8. Idenfity the errors in this Java fragment
+    and repair it by rewriting with an idiomatic
+    loop:
+
+    >int count = 0;
+    >while (count < total) {
+    >   count++;
+    >   if (this.getName(count) == nametable.userName()) {
+    >       return (true);
+    >   }
+    >}
+
+    I would rewrite this:
+
+        for (int ii = 0; ii < total; ii++) {
+            if (this.getName(count) == nametable.userName()) {
+                return true;
+            }
+        }
+
