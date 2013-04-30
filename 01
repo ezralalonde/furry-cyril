@@ -312,3 +312,53 @@
         MI2KM      (MI2FT * FT2METRE * 1000.0)
         SQMI2SQKM  (MI2KM * MI2KM)
 
+1-11. Comment on these comments.
+
+    >void dict::insert(string& w);
+    >// returns 1 if w in dictionary, otherwise return 0
+
+    >if (n > MAX || n % 2 > 0) // test for even number
+
+    >// Write a message
+    >// Add line to counter for each line written.
+    >
+    >void write_message()
+    >{
+    >   // increment line counter
+    >   line_number = line_number + 1
+    >   fprintf(fout, "%d %s\n%d %s\n%d %s\n",
+    >       line_number, HEADER,
+    >       line_number + 1, BODY,
+    >       line_number + 2, TRAILER);
+    >   // increment the counter
+    >   line_number = line_number + 2;
+    >}
+
+    The first comment is incorrect; the type of the
+    function is "void", so nothing is returned.
+
+    The second comment is also incorrect. The
+    comparison is true when n is bigger than MAX
+    or n is odd. It's confusing what is meant
+    by "even number" when the condition fails for
+    input "2".
+
+    The comments in the third secton add nothing
+    to the program, since I know what an increment
+    looks like.
+
+    I'd prefer something like:
+
+        // Write HEAD, BODY, and TRAILER to fout,
+        // incrementing line_num for each
+        void write_message()
+        {
+            fprintf(fout, "%d %s\n", line_num+1, HEADER);
+            fprintf(fout, "%d %s\n", line_num+2, BODY);
+            fprintf(fout, "%d %s\n", line_num+3, TRAILER);
+            line_num += 3;
+        }
+
+    Also, though it's not in the scope of the
+    question, I'd like to check the return values
+    of fprintf.
