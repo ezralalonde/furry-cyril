@@ -281,3 +281,34 @@
     The 'c' in each clause should also be
     parenthesized so that if c is an expression
     it won't screw up the substitution.
+
+    The use of the ternary operator is
+    redundant since the result of the expression
+    itself matches exactly the outputs used.
+
+1-10. How would you rewrite these definitions
+    to minimize potential errors?
+
+    >#define FT2METER   0.3048
+    >#define METER2FT   3.28084
+    >#define MI2FT      5280.0
+    >#define MI2KM      1.609344
+    >#define SQMI2SQKM  2.589988
+
+    I would define inverse operations to be
+    the inverse of the other operation, so that
+    accuracy was as close as possible to the
+    same for both.
+
+    I would also make it more clear where the
+    numbers from from by defining them in terms
+    of each other wherever possible.
+
+    I would also spell "metre" correctly.
+
+        FT2METRE   0.3048
+        METRE2FT   (1.0 / FT2METRE)
+        MI2FT      5280.0
+        MI2KM      (MI2FT * FT2METRE * 1000.0)
+        SQMI2SQKM  (MI2KM * MI2KM)
+
