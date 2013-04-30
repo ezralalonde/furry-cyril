@@ -1,5 +1,5 @@
 1-1. Comment one the choice of names and values
-in the following code:
+    in the following code:
 
     >#define TRUE 0
     >#define FALSE 1
@@ -166,7 +166,7 @@ in the following code:
     okay.
 
 1-6. List all the different outputs this could
-produce with various orders of evaluation:
+    produce with various orders of evaluation:
 
     >n = 1;
     >printf("%d %d\n", n++, n++);
@@ -269,3 +269,15 @@ produce with various orders of evaluation:
             }
         }
 
+1-9. Identify the problems with this macro
+    definition:
+
+    >#define ISDIGIT(c) ((c >= '0') && (c <= '9')) ? 1 : 0
+
+    There should be outer parentheses so that
+    the text substitution isn't "ruined" by
+    adjacent text.
+
+    The 'c' in each clause should also be
+    parenthesized so that if c is an expression
+    it won't screw up the substitution.
