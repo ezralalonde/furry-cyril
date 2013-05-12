@@ -32,9 +32,9 @@ Exercise 2-1. Quicksort is most naturally expressed recursively. Write
     >
     >        // move the pivot, partition vv
     >        pivot = left - 1;
-    >        for (tmp = left; tmp <= right-1; tmp++) {
-    >            if (vv[tmp] <= vv[right] && ++pivot != tmp) {
-    >                swap (vv, pivot, tmp);
+    >        for (tmp = left; tmp < right; tmp++) {
+    >            if (vv[tmp] <= vv[right]) {
+    >                swap(vv, ++pivot, tmp);
     >            }
     >        }
     >        swap(vv, ++pivot, right);
