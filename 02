@@ -143,6 +143,6 @@ Exercise 2-1. Quicksort is most naturally expressed recursively. Write
     end up sorted, just try another random combination. Again, I'm not
     going to post my implementation, and I'm not sure that this algorithm
     is systematic enough to qualify as a good-faith entry. The timing
-    complexity is (I think) O(N * N!), given a truly random sort. I
-    believe that the best case is linear, since you would just randomize
-    the list and check it, which is N iterations.
+    complexity is (I think) O(N * N!), given a truly random sort and
+    non-repeating. I believe that the best case is linear, since you 
+    would just randomize the list and check it, which is N iterations.
