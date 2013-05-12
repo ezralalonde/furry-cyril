@@ -1,0 +1,60 @@
+Exercise 2-1. Quicksort is most naturally expressed recursively. Write
+    it iteratively and compare the two versions. (Hoare describes how
+    hard it was to work out quicksort iteratively, and how neatly it
+    fell into place when he did it recursively.)
+
+    My code is below:
+
+    >// swap changes to items in array at the given indices; 
+    >// taken from the book.
+    >void swap(int vv[], int ii, int jj) {
+    >    int temp = vv[ii];
+    >    vv[ii] = vv[jj];
+    >    vv[jj] = temp;
+    >}
+
+    >// iqsort sorts an array in place, using iterative quicksort.
+    >// vv is the array to sort, right is the length of the  array.
+    >// the algorithm is similar to the recursive definition of quicksort,
+    >// except that we have to keep a stack that represents the items the
+    >// progress of the sort.
+    >// iqsort makes use of the "swap" from the book, defined above.
+    >void iqsort (int vv[], int right) {
+    >    int left = 0, pivot = 0, tmp = 0, top = 1;
+    >    int stack[right + 1];
+    >    stack[0] = left;
+    >    stack[1] = right;
+    >
+    >    while (top >= 0) {
+    >        // pop from the stack
+    >        right = stack[top--];
+    >        left  = stack[top--];
+    >
+    >        // move the pivot, partition vv
+    >        pivot = left - 1;
+    >        for (tmp = left; tmp <= right-1; tmp++) {
+    >            if (vv[tmp] <= vv[right] && ++pivot != tmp) {
+    >                swap (vv, pivot, tmp);
+    >            }
+    >        }
+    >        swap(vv, ++pivot, right);
+    >
+    >        // push lhs to the stack
+    >        if (pivot-1 > left) {
+    >            stack[++top] = left;
+    >            stack[++top] = pivot - 1;
+    >        }
+    >        // push rhs to the stack
+    >        if (pivot+1 < right) {
+    >            stack[++top] = pivot + 1;
+    >            stack[++top] = right;
+    >        }
+    >    }
+    >}
+
+    As Hoare and the authors expressed, it's not nearly as "nice" as
+    the recursive version. In particular, you need to keep track of
+    the progress of the sort using an additional data structure: a stack.
+
+    The definition seems much more error prone than the other definition,
+    being much more awkward to define and understand.
