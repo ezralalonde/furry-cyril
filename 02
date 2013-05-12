@@ -146,3 +146,8 @@ Exercise 2-1. Quicksort is most naturally expressed recursively. Write
     complexity is (I think) O(N * N!), given a truly random sort and
     non-repeating. I believe that the best case is linear, since you 
     would just randomize the list and check it, which is N iterations.
+
+    Looking ahead to section 2.6, you could increase the complexity
+    of any algorthm by using dumb array-growth methods, which are N^2.
+
+2-5.
