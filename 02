@@ -58,3 +58,91 @@ Exercise 2-1. Quicksort is most naturally expressed recursively. Write
 
     The definition seems much more error prone than the other definition,
     being much more awkward to define and understand.
+
+2-2. Our Java quicksort does a fair amount of type conversion as items
+    are cast from their original type (like Integer) to Object, and back
+    again. Experiment with a version of Quicksort.sort that uses the
+    specific type being sorted, to estimate what performance penalty is
+    incurred by type conversions.
+
+    I can't believe that I installed Java to do this, but the performance
+    hit from using the original type vs. casting to Object ranges from
+    undetectable to about 5x, depending on some parameters. The average
+    case appears that casting is between 2x and 2.5x slower than using
+    the original types.
+
+    My benchmarks were absolutely unscientific, but a few trial runs show
+    that the "primitives" are always faster, which makes sense. They also
+    show that the difference in degree sounds like a lot - 2.5x, but
+    probably isn't so bad unless you absolutely need extreme performance;
+    the actual time difference for 1 000 000 conversions was less than 1/5
+    of a second.
+
+    Since it would take me more than 1/5 of a second to make and test
+    the changes to the program, it's likely that I only start to see "real"
+    time savings if I'm doing billions or trillions of conversions.
+
+    Note that all my tests were `int` against Integer being cast
+    into `Object` using `ICmp`. I haven't done the analysis, but I imagine
+    that this is one of the most extreme differences, and that for
+    arbitrary objects (instead of primitives) the difference would be
+    even less, making the trade-off even less attractive.
+
+2-3. What are some input sequences that might cause a quicksort
+    implementation to dislay worst-case behaviour? Try to find some
+    that provoke your library version into running slowly. Automate the
+    process so that you can specify and perform a large number of
+    experiments easily.
+
+    The performance of a quicksort algorithm in practice depends strongly
+    on the pivot selection: if the pivot produces left- and right-hand
+    sides that have a large difference then the algorithm will perform
+    poorly.
+
+    In the recursive C version provided in the book, the pivot is random
+    so it's difficult to engineer a pathological case. If the pivot was
+    the first (unsorted) item of the list, as in the `iqsort` that I
+    implement in 2-1, the worst case could be achieved by using an
+    already-sorted list as input.
+
+    An already-sorted list causes the right-size all of the items that
+    have not been sorted, and are not the pivot. So if the list was
+    N items long, it would be necessary that N-1 pivot selections were
+    made, making the sort take the worst-case N^2 time, instead of the
+    average (or "expected") case of NlogN
+
+2-4. Design and implement an algorithm that will sort and array of n
+    integers as slowly as possible. You have to play fair: the algorithm
+    must make progress and eventually terminate, and the implementation
+    must not cheat with tricks like time-wasting loops. What is the
+    complexity of your algorithm as a function of n?
+
+    I it may be a failure of my imagination, but the slowest sorting
+    algorithm I could think of (in good faith, of course) is a naive
+    bubble sort, always taking N^2 time.
+
+    >void sort(int vv[], int len) {
+    >   int ii = 0, jj = 0;
+    >   for (ii = 0; ii < len; ii++) {
+    >       for (jj = 0; jj < len; jj++) {
+    >           if (vv[ii] < vv[jj]) {
+    >               swap(vv, ii, jj);
+    >           }
+    >       }
+    >   }
+    >}
+
+    Though you could also do a more obnoxious version: insertion-like
+    sort using the naive bubblesort above to find the item at each
+    index. It hurts me, so I won't include my implementation, but the
+    complexity is N^3, since a full bubblesort is included for each
+    item in the input.
+
+    Though I'm not sure it's in good faith, you could also just randomize
+    the elements of the list you're supposed to sort, and if they don't
+    end up sorted, just try another random combination. Again, I'm not
+    going to post my implementation, and I'm not sure that this algorithm
+    is systematic enough to qualify as a good-faith entry. The timing
+    complexity is (I think) O(N * N!), given a truly random sort. I
+    believe that the best case is linear, since you would just randomize
+    the list and check it, which is N iterations.
